@@ -1,458 +1,225 @@
-\# 🤖 AI-Powered Data Analyst Assistant
+# 🤖 AI-Powered Data Analyst Assistant
 
+An AI-powered analytics application that automates **Exploratory Data Analysis (EDA)**, interactive dashboard creation, and **AI-generated business insights** from structured datasets.
 
+Built using **Python, Streamlit, Pandas, Plotly, and Google Gemini AI**, the application enables users to upload CSV or Excel files, analyze business data, visualize KPIs, and generate actionable insights within minutes.
 
-An interactive analytics application that automates \*\*Exploratory Data Analysis (EDA)\*\*, dashboard creation, and \*\*AI-powered business insight generation\*\* from structured datasets.
+---
 
+# 📸 Project Preview
 
+## 🏠 Home Page
 
-Built using \*\*Python, Streamlit, Pandas, Plotly, and Google Gemini AI\*\*, the application enables users to upload CSV or Excel files, analyze business data, visualize KPIs, and generate AI-driven insights within minutes.
+![Home](assets/home.png)
 
+---
 
+## 📂 Upload Dataset
 
-\---
+![Upload Dataset](assets/upload.png)
 
+---
 
+## 📊 Exploratory Data Analysis
 
-\# 📸 Project Preview
+![EDA](assets/analysis.png)
 
+---
 
+## 📈 Interactive Dashboard
 
-\## 📈 Interactive Dashboard
+![Dashboard](assets/dashboard.png)
 
+---
 
+## 🤖 AI Business Insights
 
-!\[Dashboard](assets/dashboard.png)
+![AI Insights](assets/ai_insights.png)
 
+---
 
+# ✨ Features
 
-\---
+- 📂 Upload CSV & Excel datasets
+- 📊 Automated Exploratory Data Analysis (EDA)
+- 📋 Dataset Summary & Missing Value Analysis
+- 📈 Interactive KPI Dashboard
+- 📉 Correlation & Distribution Analysis
+- 📊 Dynamic Visualizations using Plotly
+- 🤖 AI-generated Business Insights using Google Gemini
+- 🚀 Fast and User-friendly Streamlit Interface
 
+---
 
+# 📊 Sample Dataset
 
-\## 🤖 AI Business Insights
+The project is demonstrated using an **E-commerce Transactions Dataset** containing:
 
+- User ID
+- Product ID
+- Product Category
+- Product Price
+- Discount (%)
+- Final Price
+- Payment Method
+- Purchase Date
 
+The application can analyze **any structured CSV or Excel dataset**.
 
-!\[AI Insights](assets/ai\_insights.png)
+---
 
+# 🛠️ Tech Stack
 
+### Language
 
-\---
+- Python
 
+### Libraries & Frameworks
 
+- Streamlit
+- Pandas
+- Plotly
+- OpenPyXL
+- Google Generative AI (Gemini)
 
-\## 📂 Upload Dataset
+### Concepts
 
+- Exploratory Data Analysis (EDA)
+- Business Intelligence
+- Dashboard Development
+- Data Visualization
+- AI-powered Analytics
 
+---
 
-!\[Upload Dataset](assets/upload.png)
-
-
-
-\---
-
-
-
-\## 📊 Exploratory Data Analysis
-
-
-
-!\[EDA](assets/analysis.png)
-
-
-
-\---
-
-
-
-\## 🏠 Home Page
-
-
-
-!\[Home](assets/home.png)
-
-
-
-\---
-
-
-
-\# 🚀 Features
-
-
-
-\- Upload CSV and Excel datasets
-
-\- Automatic Exploratory Data Analysis (EDA)
-
-\- Dataset Summary
-
-\- Missing Value Analysis
-
-\- Correlation Analysis
-
-\- Distribution \& Outlier Detection
-
-\- Interactive KPI Dashboard
-
-\- Dynamic Charts using Plotly
-
-\- AI-generated Business Insights using Google Gemini
-
-\- User-friendly Streamlit Interface
-
-
-
-\---
-
-
-
-\# 📊 Sample Dataset
-
-
-
-The project is demonstrated using an \*\*E-commerce Transactions Dataset\*\* containing:
-
-
-
-\- User ID
-
-\- Product ID
-
-\- Product Category
-
-\- Product Price
-
-\- Discount (%)
-
-\- Final Price
-
-\- Payment Method
-
-\- Purchase Date
-
-
-
-The application can also analyze any structured CSV or Excel dataset.
-
-
-
-\---
-
-
-
-\# 🛠 Tech Stack
-
-
-
-\### Language
-
-
-
-\- Python
-
-
-
-\### Libraries
-
-
-
-\- Streamlit
-
-\- Pandas
-
-\- Plotly Express
-
-\- Google Generative AI (Gemini)
-
-
-
-\### Concepts
-
-
-
-\- Exploratory Data Analysis (EDA)
-
-\- Data Visualization
-
-\- Business Intelligence
-
-\- Dashboard Development
-
-\- AI-powered Analytics
-
-
-
-\---
-
-
-
-\# 📂 Project Structure
-
-
+# 📂 Project Structure
 
 ```text
-
-AI-Data-Analyst-Assistant/
-
+AI-Powered-Data-Analyst-Assistant
 │
-
 ├── app.py
-
 ├── README.md
-
 ├── requirements.txt
-
 ├── .gitignore
-
 │
-
 ├── assets/
-
-│   ├── dashboard.png
-
-│   ├── ai\_insights.png
-
+│   ├── home.png
 │   ├── upload.png
-
 │   ├── analysis.png
-
-│   └── home.png
-
+│   ├── dashboard.png
+│   └── ai_insights.png
 │
-
 ├── datasets/
-
-│   └── ecommerce\_dataset\_updated.csv
-
+│   └── ecommerce_dataset_updated.csv
 │
-
-├── pages/
-
-│   ├── 1\_Upload\_Data.py
-
-│   ├── 2\_Data\_Analysis.py
-
-│   ├── 3\_Dashboard.py
-
-│   └── 4\_AI\_Insights.py
-
-│
-
-└── venv/
-
+└── pages/
+    ├── 1_Upload_Data.py
+    ├── 2_Data_Analysis.py
+    ├── 3_Dashboard.py
+    └── 4_AI_Insights.py
 ```
 
+---
 
-
-\---
-
-
-
-\# ⚙ Installation
-
-
+# ⚙️ Installation
 
 Clone the repository
 
-
-
 ```bash
-
-git clone https://github.com/yourusername/AI-Data-Analyst-Assistant.git
-
+git clone https://github.com/ashikaas/AI-Powered-Data-Analyst-Assistant.git
 ```
-
-
 
 Move into the project
 
-
-
 ```bash
-
-cd AI-Data-Analyst-Assistant
-
+cd AI-Powered-Data-Analyst-Assistant
 ```
-
-
 
 Create a virtual environment
 
-
-
 ```bash
-
 python -m venv venv
-
 ```
-
-
 
 Activate the environment
 
-
-
-\### Windows
-
-
+### Windows
 
 ```bash
-
-venv\\Scripts\\activate
-
+venv\Scripts\activate
 ```
 
-
-
-\### macOS / Linux
-
-
+### macOS/Linux
 
 ```bash
-
 source venv/bin/activate
-
 ```
-
-
 
 Install dependencies
 
-
-
 ```bash
-
 pip install -r requirements.txt
-
 ```
 
+---
 
-
-\---
-
-
-
-\# ▶ Run the Application
-
-
+# ▶️ Run the Application
 
 ```bash
-
 streamlit run app.py
-
 ```
-
-
 
 The application will launch at:
 
-
-
-```
-
+```text
 http://localhost:8501
-
 ```
 
+---
 
+# 🌐 Deployment
 
-\---
+The application can be deployed on **Streamlit Community Cloud**.
 
+1. Push the project to GitHub.
+2. Connect the repository to Streamlit Community Cloud.
+3. Set **app.py** as the entry point.
+4. Add your **GOOGLE_API_KEY** under **App Settings → Secrets**.
+5. Deploy and share the live application.
 
+---
 
-\# 🌐 Deployment
+# 📈 AI-Generated Insights
 
+The application can generate:
 
+- Executive Summary
+- Key Trends
+- Business Opportunities
+- Potential Risks
+- Business Recommendations
 
-The application can be deployed using \*\*Streamlit Community Cloud\*\*.
+---
 
+# 🚀 Future Enhancements
 
+- Export AI insights as PDF
+- Dashboard report download
+- Database connectivity (PostgreSQL/MySQL)
+- Multi-file dataset analysis
+- Advanced statistical analytics
+- Custom AI prompts
 
-1\. Push the repository to GitHub.
+---
 
-2\. Open Streamlit Community Cloud.
+# 👨‍💻 Author
 
-3\. Connect your GitHub repository.
-
-4\. Select \*\*app.py\*\* as the entry point.
-
-5\. Deploy and share the generated application URL.
-
-
-
-\---
-
-
-
-\# 📈 Business Insights Generated
-
-
-
-The AI assistant can generate insights such as:
-
-
-
-\- Executive Summary
-
-\- Revenue Trends
-
-\- Product Category Performance
-
-\- Pricing \& Discount Analysis
-
-\- Customer Purchase Patterns
-
-\- Business Recommendations
-
-
-
-\---
-
-
-
-\# 🔮 Future Enhancements
-
-
-
-\- Export AI insights as PDF
-
-\- Download dashboard reports
-
-\- Multi-file dataset support
-
-\- Database connectivity (PostgreSQL/MySQL)
-
-\- Advanced statistical analysis
-
-\- Custom AI prompts
-
-
-
-\---
-
-
-
-\# 👨‍💻 Author
-
-
-
-\*\*Ashika Srivastava\*\*
-
-
+**Ashika Srivastava**
 
 B.Tech Computer Science Engineering
 
+Interested in **Data Analytics, Product Analytics, Business Intelligence, and AI-powered Analytics**.
 
+---
 
-Interested in Data Analytics, Business Intelligence, AI-powered Analytics, and Product Analytics.
-
-
-
-\---
-
-
-
-\## ⭐ If you found this project useful, consider giving it a Star!
-
+## ⭐ If you found this project useful, consider giving it a Star!
