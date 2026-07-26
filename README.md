@@ -26,7 +26,7 @@ Python · Streamlit · Pandas/NumPy · Plotly · OpenPyXL · Groq SDK (LLM + Whi
 
 ```text
 AI-Powered-Data-Analyst-Assistant
-├── 0_Home.py                       # Entry point
+├── app.py                            # Entry point
 ├── requirements.txt
 ├── .streamlit/
 │   ├── config.toml
@@ -52,8 +52,8 @@ AI-Powered-Data-Analyst-Assistant
 ## ⚙️ Installation
 
 ```bash
-git clone https://github.com/ashikaas/AI-Powered-Data-Analyst-Assistant.git
-cd AI-Powered-Data-Analyst-Assistant
+git clone https://github.com/Akshadgajapure/DataPilot.git
+cd DataPilot
 python -m venv venv
 venv\Scripts\activate      # Windows
 source venv/bin/activate   # macOS/Linux
@@ -72,7 +72,7 @@ GROQ_API_KEY = "your-groq-api-key-here"
 ## ▶️ Run
 
 ```bash
-streamlit run 0_Home.py
+streamlit run app.py
 ```
 
 Runs at `http://localhost:8501`
@@ -81,9 +81,9 @@ Runs at `http://localhost:8501`
 
 ## 🌐 Deployment (Streamlit Community Cloud)
 
-1. Push to GitHub (`secrets.toml` stays gitignored)
+1. Push to GitHub (`.streamlit/secrets.toml` stays gitignored — only that file, not the whole `.streamlit/` folder, so `config.toml` still deploys)
 2. Connect repo to Streamlit Community Cloud
-3. Set **`0_Home.py`** as entry point
+3. Set **`app.py`** as the entry point
 4. Add `GROQ_API_KEY` under App Settings → Secrets
 
 ---
