@@ -1,252 +1,70 @@
-# 🚀 DataPilot — AI-Powered Data Analytics Platform
+# 🤖 AI-Powered Data Analyst Assistant
 
-DataPilot is an intelligent data analytics platform that automates the complete analytics workflow—from raw dataset ingestion to data profiling, cleaning, interactive dashboards, and AI-generated business insights.
+An AI-powered analytics app that automates **EDA**, a **strict auditable data-cleaning pipeline**, an **interactive KPI dashboard**, and **AI-generated business insights with a voice-enabled chatbot** from structured datasets.
 
-Designed for data analysts, business analysts, and data scientists, the platform enables users to transform raw CSV or Excel files into actionable insights with minimal manual effort.
-
----
-
-## ✨ Key Features
-
-### 📂 Dataset Upload
-- Upload CSV and Excel datasets
-- Automatic schema detection
-- Shared dataset across all application modules
+Built with **Python, Streamlit, Pandas, Plotly, ReportLab, and Groq AI (`llama-3.3-70b-versatile`)**.
 
 ---
 
-### 🧹 Data Cleaning Studio
+## ✨ Features
 
-A complete interactive data preprocessing environment.
-
-Features include:
-
-- Remove duplicate records
-- Drop unwanted columns
-- Handle missing values
-  - Mean
-  - Median
-  - Mode
-  - Custom values
-  - Remove incomplete rows
-- Standardize dataset
-- Export cleaned dataset as CSV
+- **Data Upload** — CSV/TSV/Excel, auto-detects encoding & delimiter, multi-sheet support
+- **Strict Data Cleaning Pipeline** — 5-stage engine (profile → structural → missing values → validity → outliers), fully logged, downloadable change log (JSON) and flagged outliers (CSV)
+- **Automated EDA** — per-column profiling, data quality warnings, distribution grids, correlation heatmap
+- **Business KPI Dashboard** — auto-detects revenue/quantity/category/date columns, no manual setup
+- **AI Insights & Chatbot** — Groq-generated evidence-based business report (downloadable as PDF/txt) + a chat assistant with **voice input (Whisper)** and **voice output (gTTS)**
 
 ---
 
-### 📊 Automated Data Profiling
+## 🛠️ Tech Stack
 
-Automatically generates a comprehensive data quality report.
-
-Includes:
-
-- Column type detection
-- Missing value analysis
-- Unique value statistics
-- Cardinality detection
-- Numeric statistics
-  - Mean
-  - Median
-  - Standard deviation
-  - Skewness
-- Outlier detection (IQR)
-- Correlation analysis
-- Duplicate detection
-- ID column detection
-- Data quality warnings
-- Plain-language dataset summary
+Python · Streamlit · Pandas/NumPy · Plotly · OpenPyXL · Groq SDK (LLM + Whisper) · ReportLab + Matplotlib (PDF) · audio-recorder-streamlit · gTTS
 
 ---
 
-### 📈 Interactive Dashboard
+## 📂 Project Structure
 
-Create business dashboards instantly.
-
-Supports:
-
-- Dynamic filtering
-- KPI cards
-- Trend analysis
-- Bar charts
-- Line charts
-- Scatter plots
-- Box plots
-- Correlation heatmaps
-- Drill-down analysis
-
----
-
-### 🤖 AI Business Insights
-
-Powered by **Groq Llama 3.3-70B**.
-
-Generates:
-
-- Executive Summary
-- Key Business Trends
-- Risks
-- Opportunities
-- Strategic Recommendations
-
-The AI uses the computed EDA profile to generate context-aware insights instead of relying solely on raw data.
-
----
-
-## 📸 Application Preview
-
-### Home
-
-![Home](assets/home.png)
-
----
-
-### Upload Dataset
-
-![Upload](assets/upload.png)
-
----
-
-### Data Profiling
-
-![EDA](assets/analysis.png)
-
----
-
-### Interactive Dashboard
-
-![Dashboard](assets/dashboard.png)
-
----
-
-### AI Insights
-
-![AI](assets/ai_insights.png)
-
----
-
-## 🏗️ Architecture
-
-```
-                 CSV / Excel
-                      │
-                      ▼
-              Dataset Upload
-                      │
-                      ▼
-              Data Cleaning
-                      │
-                      ▼
-            Automated Profiling
-                      │
-        ┌─────────────┴─────────────┐
-        ▼                           ▼
- Interactive Dashboard      AI Insights
-        │                           │
-        └─────────────┬─────────────┘
-                      ▼
-             Business Decisions
-```
-
----
-
-## 🛠️ Technology Stack
-
-### Languages
-
-- Python
-
-### Framework
-
-- Streamlit
-
-### Data Processing
-
-- Pandas
-- NumPy
-
-### Visualization
-
-- Plotly
-- Matplotlib
-
-### AI
-
-- Groq API
-- Llama 3.3 70B Versatile
-
-### File Processing
-
-- OpenPyXL
-
----
-
-## 📁 Project Structure
-
-```
-DataPilot
-│
-├── app.py
+```text
+AI-Powered-Data-Analyst-Assistant
+├── 0_Home.py                       # Entry point
 ├── requirements.txt
-├── README.md
-├── .gitignore
-│
-├── pages
-│   ├── Upload_Data.py
-│   ├── Data_Analysis.py
-│   ├── Dashboard.py
-│   ├── AI_Insights.py
-│   └── Data_Cleaning.py
-│
-├── utils
+├── .streamlit/
+│   ├── config.toml
+│   └── secrets.toml                # GROQ_API_KEY (gitignored)
+├── utils/
 │   ├── data_profiler.py
 │   ├── dashboard_helpers.py
+│   ├── data_cleaning_engine.py
+│   ├── pdf_report.py
 │   └── ui.py
-│
-├── assets
-│
-└── datasets
+├── pages/
+│   ├── 1_Upload_Data.py
+│   ├── 2_Data_Analysis.py
+│   ├── 3_Data_Cleaning.py
+│   ├── 4_Smart_Visualizations.py
+│   └── 5_AI_Insights.py
+└── datasets/
+    └── ecommerce_dataset_updated.csv
 ```
 
 ---
 
 ## ⚙️ Installation
 
-Clone the repository
-
 ```bash
-git clone https://github.com/YOUR_USERNAME/DataPilot.git
-```
-
-Move into the project
-
-```bash
-cd DataPilot
-```
-
-Create a virtual environment
-
-```bash
+git clone https://github.com/ashikaas/AI-Powered-Data-Analyst-Assistant.git
+cd AI-Powered-Data-Analyst-Assistant
 python -m venv venv
-```
-
-Activate it
-
-Windows
-
-```bash
-venv\Scripts\activate
-```
-
-Linux / macOS
-
-```bash
-source venv/bin/activate
-```
-
-Install dependencies
-
-```bash
+venv\Scripts\activate      # Windows
+source venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
+pip install reportlab matplotlib   # required for PDF export, missing from requirements.txt
+```
+
+Add your key to `.streamlit/secrets.toml`:
+
+```toml
+GROQ_API_KEY = "your-groq-api-key-here"
 ```
 
 ---
@@ -254,68 +72,31 @@ pip install -r requirements.txt
 ## ▶️ Run
 
 ```bash
-streamlit run app.py
+streamlit run 0_Home.py
 ```
 
----
-
-## 🌐 Deployment
-
-Deploy directly using **Streamlit Community Cloud**.
-
-1. Push repository to GitHub
-2. Connect repository
-3. Select `app.py`
-4. Add your Groq API key under **Secrets**
-5. Deploy
+Runs at `http://localhost:8501`
 
 ---
 
-## 📊 Supported Dataset Types
+## 🌐 Deployment (Streamlit Community Cloud)
 
-The application supports any structured dataset including:
-
-- Sales
-- Retail
-- Banking
-- HR
-- Healthcare
-- Marketing
-- Finance
-- E-commerce
-- Supply Chain
+1. Push to GitHub (`secrets.toml` stays gitignored)
+2. Connect repo to Streamlit Community Cloud
+3. Set **`0_Home.py`** as entry point
+4. Add `GROQ_API_KEY` under App Settings → Secrets
 
 ---
 
-## 💡 Future Roadmap
+## 🚀 Future Enhancements
 
-- PDF report generation
-- SQL database connectivity
-- Multi-file analysis
-- AutoML integration
-- Time-series forecasting
-- Natural language querying
-- Role-based authentication
-- Cloud storage integration
+- Add `reportlab`/`matplotlib` to `requirements.txt`
+- Database connectivity (PostgreSQL/MySQL)
+- Multi-file dataset analysis
+- Custom AI prompts
 
 ---
 
 ## 👨‍💻 Author
 
 **Akshad Gajapure**
-
-B.Tech, National Institute of Technology Raipur
-
-**Areas of Interest**
-
-- Data Analytics
-- Data Science
-- Business Intelligence
-- Machine Learning
-- AI Applications
-
----
-
-## ⭐ Support
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
