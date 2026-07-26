@@ -61,12 +61,6 @@ pip install -r requirements.txt
 pip install reportlab matplotlib   # required for PDF export, missing from requirements.txt
 ```
 
-Add your key to `.streamlit/secrets.toml`:
-
-```toml
-GROQ_API_KEY = "your-groq-api-key-here"
-```
-
 ---
 
 ## ▶️ Run
