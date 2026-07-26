@@ -1,176 +1,226 @@
-# 🤖 AI-Powered Data Analyst Assistant
+# 🚀 DataPilot — AI-Powered Data Analytics Platform
 
-An AI-powered analytics application that automates **Exploratory Data Analysis (EDA)**, interactive dashboard creation, and **AI-generated business insights** from structured datasets.
+DataPilot is an intelligent data analytics platform that automates the complete analytics workflow—from raw dataset ingestion to data profiling, cleaning, interactive dashboards, and AI-generated business insights.
 
-Built using **Python, Streamlit, Pandas, Plotly, and Google Gemini AI**, the application enables users to upload CSV or Excel files, analyze business data, visualize KPIs, and generate actionable insights within minutes.
+Designed for data analysts, business analysts, and data scientists, the platform enables users to transform raw CSV or Excel files into actionable insights with minimal manual effort.
 
 ---
 
-# 📸 Project Preview
+## ✨ Key Features
 
-## 🏠 Home Page
+### 📂 Dataset Upload
+- Upload CSV and Excel datasets
+- Automatic schema detection
+- Shared dataset across all application modules
+
+---
+
+### 🧹 Data Cleaning Studio
+
+A complete interactive data preprocessing environment.
+
+Features include:
+
+- Remove duplicate records
+- Drop unwanted columns
+- Handle missing values
+  - Mean
+  - Median
+  - Mode
+  - Custom values
+  - Remove incomplete rows
+- Standardize dataset
+- Export cleaned dataset as CSV
+
+---
+
+### 📊 Automated Data Profiling
+
+Automatically generates a comprehensive data quality report.
+
+Includes:
+
+- Column type detection
+- Missing value analysis
+- Unique value statistics
+- Cardinality detection
+- Numeric statistics
+  - Mean
+  - Median
+  - Standard deviation
+  - Skewness
+- Outlier detection (IQR)
+- Correlation analysis
+- Duplicate detection
+- ID column detection
+- Data quality warnings
+- Plain-language dataset summary
+
+---
+
+### 📈 Interactive Dashboard
+
+Create business dashboards instantly.
+
+Supports:
+
+- Dynamic filtering
+- KPI cards
+- Trend analysis
+- Bar charts
+- Line charts
+- Scatter plots
+- Box plots
+- Correlation heatmaps
+- Drill-down analysis
+
+---
+
+### 🤖 AI Business Insights
+
+Powered by **Groq Llama 3.3-70B**.
+
+Generates:
+
+- Executive Summary
+- Key Business Trends
+- Risks
+- Opportunities
+- Strategic Recommendations
+
+The AI uses the computed EDA profile to generate context-aware insights instead of relying solely on raw data.
+
+---
+
+## 📸 Application Preview
+
+### Home
 
 ![Home](assets/home.png)
 
 ---
 
-## 📂 Upload Dataset
+### Upload Dataset
 
-![Upload Dataset](assets/upload.png)
+![Upload](assets/upload.png)
 
 ---
 
-## 📊 Exploratory Data Analysis
+### Data Profiling
 
 ![EDA](assets/analysis.png)
 
 ---
 
-## 📈 Interactive Dashboard
+### Interactive Dashboard
 
 ![Dashboard](assets/dashboard.png)
 
 ---
 
-## 🤖 AI Business Insights
+### AI Insights
 
-![AI Insights](assets/ai_insights.png)
-
----
-
-# ✨ Features
-
-### 📂 Data Upload
-- Upload CSV & Excel datasets; data is shared across all pages via session state
-
-### 🧹 Data Cleaning Studio
-- **Interactive Cleaning**: Drop duplicates and remove unnecessary columns
-- **Handle Missing Values**: Impute missing data with mean, median, mode, or custom values, or drop rows with missing values
-- **Apply Globally**: Update the dataset across all other pages (EDA, Dashboard, AI Insights) with one click
-- **Export**: Download the cleaned dataset as a fresh CSV file
-
-### 📊 Automated EDA — Data Profiling Report
-- **Per-column profile table**: dtype, % missing, unique count, cardinality (low/medium/high)
-- Numeric stats: min, max, mean, median, std, skewness, **outlier count (IQR method)**
-- Categorical stats: top-5 values with frequency %, **ID-column detection** (near-100% unique)
-- Datetime stats: min/max date, span in days, **gap detection**
-- **Data Quality Warnings** — auto-generated: >30% missing, constant columns, duplicate rows, case-variant detection (e.g. "Male"/"male"/"M"), highly correlated pairs (|r| > 0.85)
-- **Distribution grid** — histograms for every numeric column, bar charts for every categorical, rendered 3-per-row automatically
-- **Plain-language Dataset Summary** — computed from real stats, not LLM guessing
-- Correlation heatmap with high-correlation pair annotations
-
-### 📈 Fully Interactive Dashboard
-- **Persistent filter sidebar**: date range picker, multi-select per categorical column, range slider per numeric column — all AND-combined, updates charts live
-- **Reset Filters** button clears all active filters in one click
-- **KPI cards** with delta vs unfiltered baseline (period-over-period trend when a date column exists)
-- **Switchable chart types**: Bar, Line, Scatter, Box Plot, Correlation Heatmap
-- Axis dropdowns update valid options per chart type (e.g. Box Plot Y must be numeric)
-- **Trend / Line chart warning**: detects non-datetime X axis and alerts the user
-- **Drill-down**: click bars or scatter points → a detail chart + data table appear below
-- Large datasets (> 50 000 rows) get an explicit **Apply Filters** button
-
-### 🤖 AI-Powered Business Insights
-- Powered by **Groq API** (`llama-3.3-70b-versatile`) for fast, high-quality analysis
-- Prompt is grounded in the **computed EDA profile** when EDA page is visited first
-- Generates: Executive Summary, Key Trends, Risks, Opportunities, Recommendations
-
-### 🛠️ Code Quality
-- Profiling logic in `utils/data_profiler.py` — pure functions, no Streamlit dependency
-- Dashboard logic in `utils/dashboard_helpers.py` — pure filter + axis helpers
-- Every function has a docstring explaining inputs, outputs, and design decisions
+![AI](assets/ai_insights.png)
 
 ---
 
-# 📊 Sample Dataset
+## 🏗️ Architecture
 
-The project is demonstrated using an **E-commerce Transactions Dataset** containing:
-
-- User ID
-- Product ID
-- Product Category
-- Product Price
-- Discount (%)
-- Final Price
-- Payment Method
-- Purchase Date
-
-The application can analyze **any structured CSV or Excel dataset**.
-
----
-
-# 🛠️ Tech Stack
-
-### Language
-
-- Python
-
-### Libraries & Frameworks
-
-- Streamlit
-- Pandas
-- Plotly
-- OpenPyXL
-- Groq Python SDK (LLM inference via `llama-3.3-70b-versatile`)
-
-### Concepts
-
-- Exploratory Data Analysis (EDA) & Automated Data Profiling
-- Business Intelligence & Dashboard Development
-- Data Visualization & Interactive Filtering
-- AI-powered Analytics
-
----
-
-# 📂 Project Structure
-
-```text
-AI-Powered-Data-Analyst-Assistant
-│
-├── app.py                          # Home page
-├── README.md
-├── requirements.txt
-├── .gitignore
-│
-├── .streamlit/
-│   └── secrets.toml                # API keys (gitignored — never committed)
-│
-├── utils/                          # Shared business logic (no Streamlit code)
-│   ├── __init__.py
-│   ├── data_profiler.py            # EDA profiling engine (pure functions)
-│   └── dashboard_helpers.py        # Filter application + chart axis helpers
-│
-├── pages/
-│   ├── 1_Upload_Data.py            # File upload → st.session_state["df"]
-│   ├── 2_Data_Analysis.py          # Automated data profiling report
-│   ├── 3_Dashboard.py              # Fully interactive filtered dashboard
-│   ├── 4_AI_Insights.py            # Groq-powered business insights
-│   └── 5_Data_Cleaning.py          # Interactive dataset cleaning & export
-│
-├── assets/
-│   ├── home.png
-│   ├── upload.png
-│   ├── analysis.png
-│   ├── dashboard.png
-│   └── ai_insights.png
-│
-└── datasets/
-    └── ecommerce_dataset_updated.csv
+```
+                 CSV / Excel
+                      │
+                      ▼
+              Dataset Upload
+                      │
+                      ▼
+              Data Cleaning
+                      │
+                      ▼
+            Automated Profiling
+                      │
+        ┌─────────────┴─────────────┐
+        ▼                           ▼
+ Interactive Dashboard      AI Insights
+        │                           │
+        └─────────────┬─────────────┘
+                      ▼
+             Business Decisions
 ```
 
 ---
 
-# ⚙️ Installation
+## 🛠️ Technology Stack
+
+### Languages
+
+- Python
+
+### Framework
+
+- Streamlit
+
+### Data Processing
+
+- Pandas
+- NumPy
+
+### Visualization
+
+- Plotly
+- Matplotlib
+
+### AI
+
+- Groq API
+- Llama 3.3 70B Versatile
+
+### File Processing
+
+- OpenPyXL
+
+---
+
+## 📁 Project Structure
+
+```
+DataPilot
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── pages
+│   ├── Upload_Data.py
+│   ├── Data_Analysis.py
+│   ├── Dashboard.py
+│   ├── AI_Insights.py
+│   └── Data_Cleaning.py
+│
+├── utils
+│   ├── data_profiler.py
+│   ├── dashboard_helpers.py
+│   └── ui.py
+│
+├── assets
+│
+└── datasets
+```
+
+---
+
+## ⚙️ Installation
 
 Clone the repository
 
 ```bash
-git clone https://github.com/ashikaas/AI-Powered-Data-Analyst-Assistant.git
+git clone https://github.com/YOUR_USERNAME/DataPilot.git
 ```
 
 Move into the project
 
 ```bash
-cd AI-Powered-Data-Analyst-Assistant
+cd DataPilot
 ```
 
 Create a virtual environment
@@ -179,15 +229,15 @@ Create a virtual environment
 python -m venv venv
 ```
 
-Activate the environment
+Activate it
 
-### Windows
+Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-### macOS/Linux
+Linux / macOS
 
 ```bash
 source venv/bin/activate
@@ -201,63 +251,71 @@ pip install -r requirements.txt
 
 ---
 
-# ▶️ Run the Application
+## ▶️ Run
 
 ```bash
 streamlit run app.py
 ```
 
-The application will launch at:
+---
 
-```text
-http://localhost:8501
-```
+## 🌐 Deployment
+
+Deploy directly using **Streamlit Community Cloud**.
+
+1. Push repository to GitHub
+2. Connect repository
+3. Select `app.py`
+4. Add your Groq API key under **Secrets**
+5. Deploy
 
 ---
 
-# 🌐 Deployment
+## 📊 Supported Dataset Types
 
-The application can be deployed on **Streamlit Community Cloud**.
+The application supports any structured dataset including:
 
-1. Push the project to GitHub.
-2. Connect the repository to Streamlit Community Cloud.
-3. Set **app.py** as the entry point.
-4. Add your **GOOGLE_API_KEY** under **App Settings → Secrets**.
-5. Deploy and share the live application.
-
----
-
-# 📈 AI-Generated Insights
-
-The application can generate:
-
-- Executive Summary
-- Key Trends
-- Business Opportunities
-- Potential Risks
-- Business Recommendations
+- Sales
+- Retail
+- Banking
+- HR
+- Healthcare
+- Marketing
+- Finance
+- E-commerce
+- Supply Chain
 
 ---
 
-# 🚀 Future Enhancements
+## 💡 Future Roadmap
 
-- Export AI insights as PDF
-- Dashboard report download
-- Database connectivity (PostgreSQL/MySQL)
-- Multi-file dataset analysis
-- Advanced statistical analytics
-- Custom AI prompts
-
----
-
-# 👨‍💻 Author
-
-**Ashika Srivastava**
-
-B.Tech Computer Science Engineering
-
-Interested in **Data Analytics, Product Analytics, Business Intelligence, and AI-powered Analytics**.
+- PDF report generation
+- SQL database connectivity
+- Multi-file analysis
+- AutoML integration
+- Time-series forecasting
+- Natural language querying
+- Role-based authentication
+- Cloud storage integration
 
 ---
 
-## ⭐ If you found this project useful, consider giving it a Star!
+## 👨‍💻 Author
+
+**Akshad Gajapure**
+
+B.Tech, National Institute of Technology Raipur
+
+**Areas of Interest**
+
+- Data Analytics
+- Data Science
+- Business Intelligence
+- Machine Learning
+- AI Applications
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
