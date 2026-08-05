@@ -33,6 +33,7 @@ _NON_NEG_KEYWORDS = [
     "price", "revenue", "cost", "qty", "quantity", "age", "salary",
     "amount", "distance", "weight", "height", "size", "score",
     "rate", "ratio", "count", "total", "sum", "balance",
+    "income", "pay", "wage", "compensation"
 ]
 
 # ── Thresholds ────────────────────────────────────────────────────────────────
@@ -51,7 +52,7 @@ def _is_id_column(col: str, series: pd.Series) -> bool:
             return True
     # Cardinality-based heuristic: almost every value is unique → likely an ID
     n = len(series.dropna())
-    if n > 0 and series.nunique() / n >= _HIGH_CARD_RATIO:
+    if n > 20 and series.nunique() / n >= _HIGH_CARD_RATIO:
         return True
     return False
 
@@ -407,10 +408,12 @@ class StrictDataCleaner:
         Domain-agnostic validity checks:
           - Semantic string validation (email, phone) by column-name heuristics.
           - Non-negative domain enforcement by keyword heuristics.
+          - Bounded metrics enforcement (e.g. percentages, age).
           - Auto-detected mathematical relationships (e.g. Total = A × B).
         """
         numeric_cols = self.df.select_dtypes(include="number").columns
         string_cols  = self.df.select_dtypes(include="object").columns
+        new_nans_cols = set()
 
         # ── 4a. Semantic string validation ──────────────────────────────────
         for col in string_cols:
@@ -467,22 +470,62 @@ class StrictDataCleaner:
                                         new_stat=flag_col,
                                         details="Values do not start with http:// or https://")
 
-        # ── 4b. Non-negative domain enforcement ──────────────────────────────
+        # ── 4b. Bounded domain enforcement ──────────────────────────────
         for col in numeric_cols:
             if col.endswith(("_Is_Missing", "_Is_Invalid", "_Is_Outlier")):
                 continue
             if _is_id_column(col, self.df[col]):
                 continue
             col_lower = col.lower()
+            
+            # Non-negative check
             if any(kw in col_lower for kw in _NON_NEG_KEYWORDS):
                 neg_mask  = self.df[col] < 0
                 neg_count = int(neg_mask.sum())
                 if neg_count > 0:
                     self.df.loc[neg_mask, col] = np.nan
+                    new_nans_cols.add(col)
                     self.logger.log("4_Validity", col, neg_count,
                                     "Invalid Negative → NaN",
                                     details=f"'{col}' should be non-negative. "
                                             "Replaced with NaN for downstream imputation review.")
+
+            # Percentage/Rate check (0 to 100)
+            if "pct" in col_lower or "percentage" in col_lower:
+                max_val = self.df[col].max()
+                if pd.notna(max_val) and max_val > 100:
+                    invalid_mask = self.df[col] > 100
+                    invalid_count = int(invalid_mask.sum())
+                    if invalid_count > 0:
+                        self.df.loc[invalid_mask, col] = np.nan
+                        new_nans_cols.add(col)
+                        self.logger.log("4_Validity", col, invalid_count,
+                                        "Invalid Percentage (>100) → NaN",
+                                        details=f"'{col}' should be ≤ 100. Replaced with NaN.")
+            
+            # Age check (0 to 120)
+            if col_lower == "age" or col_lower.endswith("_age"):
+                invalid_mask = self.df[col] > 120
+                invalid_count = int(invalid_mask.sum())
+                if invalid_count > 0:
+                    self.df.loc[invalid_mask, col] = np.nan
+                    new_nans_cols.add(col)
+                    self.logger.log("4_Validity", col, invalid_count,
+                                    "Invalid Age (>120) → NaN",
+                                    details=f"'{col}' should be ≤ 120. Replaced with NaN.")
+
+            # Satisfaction / Rating check (often 1-5, 0-10)
+            if any(kw in col_lower for kw in ["satisfaction", "rating"]):
+                median_val = self.df[col].median()
+                if pd.notna(median_val) and median_val <= 10:
+                    invalid_mask = self.df[col] > 10
+                    invalid_count = int(invalid_mask.sum())
+                    if invalid_count > 0:
+                        self.df.loc[invalid_mask, col] = np.nan
+                        new_nans_cols.add(col)
+                        self.logger.log("4_Validity", col, invalid_count,
+                                        "Invalid Rating (>10) → NaN",
+                                        details=f"'{col}' typically bounded ≤ 10. Replaced with NaN.")
 
         # ── 4c. Auto-detect mathematical column relationships ─────────────────
         # Looks for Total = A × B style relationships (domain-agnostic).
@@ -557,6 +600,42 @@ class StrictDataCleaner:
                                             details=f"Computed: {c2} = {total_col} / {c1}")
 
                         break  # move on to the next potential total_col
+
+        # ── 4d. Re-impute NaNs generated in Stage 4 ─────────────────────────
+        for col in new_nans_cols:
+            missing_count = int(self.df[col].isnull().sum())
+            if missing_count > 0:
+                n_rows = len(self.df)
+                missing_pct = (missing_count / n_rows) * 100
+                info = self.profile.get(col, {})
+                skew = info.get("skew")
+                if skew is None:
+                    try:
+                        skew = float(self.df[col].skew())
+                    except Exception:
+                        skew = 0.0
+                
+                if missing_pct <= _IMPUTE_THRESH:
+                    if abs(skew) > _SKEW_THRESH:
+                        val = self.df[col].median()
+                        method = f"Median Re-Imputation (Stage 4)"
+                    else:
+                        val = self.df[col].mean()
+                        method = f"Mean Re-Imputation (Stage 4)"
+                        
+                    if pd.notna(val):
+                        self.df[col] = self.df[col].fillna(val)
+                        self.logger.log("4_Validity", col, missing_count, method,
+                                        new_stat=round(val, 6),
+                                        details="Re-imputed NaNs introduced during validity checks.")
+                else:
+                    # Too many missing -> update flag col
+                    flag_col = f"{col}_Is_Missing"
+                    self.df[flag_col] = self.df[col].isnull()
+                    self.logger.log("4_Validity", col, missing_count,
+                                    "Flagged (Too Many Invalid → NaNs)",
+                                    new_stat=flag_col,
+                                    details="Too many values invalidated to safely re-impute.")
 
     # ═════════════════════════════════════════════════════════════════════════
     # Stage 5 — Outlier Flagging (IQR)
