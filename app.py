@@ -18,17 +18,17 @@ st.title("🤖 AI-Powered Data Analyst Assistant")
 
 st.markdown(
 """
-### Industry-Grade Data Intelligence 🚀
+### Interactive Data Intelligence 🚀
 
-Upload your raw, messy datasets (CSV/Excel) and let our 3-pass AI engine transform them into strictly audited, production-ready assets.
+Upload your raw datasets (CSV/Excel) and let our pipeline clean, analyze, and profile your data for you.
 
-Our platform is engineered for data integrity. We prioritize defensible logic, robust statistical imputation, and completely transparent audit logging so you can trust your data pipelines.
+Our platform helps you identify data quality issues, visualize trends, and even chat with your data using natural language SQL generation.
 
 ---
 
 ### Tech Stack
 
-**Python • Pandas • Plotly • ReportLab • Streamlit • Groq AI**
+**Python • Pandas • Plotly • DuckDB • Streamlit • Groq AI**
 
 👈 **Use the sidebar to navigate through the application.**
 """
