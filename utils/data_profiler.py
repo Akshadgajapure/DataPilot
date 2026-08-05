@@ -93,15 +93,17 @@ def profile_numeric_column(series: pd.Series) -> dict:
     lower_fence = q1 - 1.5 * iqr
     upper_fence = q3 + 1.5 * iqr
     outlier_count = int(((clean < lower_fence) | (clean > upper_fence)).sum())
+    outlier_pct = round(outlier_count / len(clean) * 100, 2) if len(clean) > 0 else 0.0
 
     return {
         "min":           round(float(clean.min()), 4),
         "max":           round(float(clean.max()), 4),
         "mean":          round(float(clean.mean()), 4),
         "median":        round(float(clean.median()), 4),
-        "std":           round(float(clean.std()), 4),
-        "skewness":      round(float(clean.skew()), 4),
+        "std":           round(float(clean.std()), 4) if len(clean) > 1 else 0.0,
+        "skewness":      round(float(clean.skew()), 4) if len(clean) > 2 else 0.0,
         "outlier_count": outlier_count,
+        "outlier_pct":   outlier_pct,
     }
 
 

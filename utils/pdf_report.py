@@ -242,7 +242,8 @@ def _correlation_heatmap(df):
                     fontsize=7, color="black" if abs(val) < 0.7 else "white")
     ax.set_title("Pearson Correlation Matrix", fontsize=11, fontweight="bold", pad=12)
     fig.tight_layout()
-    return _fig_to_image(fig, width=16*cm, height=max(5*cm, len(num_cols)*1.1*cm))
+    calc_height = max(5*cm, len(num_cols)*1.1*cm)
+    return _fig_to_image(fig, width=16*cm, height=min(calc_height, 20*cm))
 
 
 def _distribution_charts(df, max_cols=4):
@@ -327,7 +328,8 @@ def _missing_values_chart(df):
     ]
     ax.legend(handles=patches, fontsize=7, loc="lower right")
     fig.tight_layout()
-    return _fig_to_image(fig, width=14*cm, height=max(4*cm, len(missing)*0.7*cm))
+    calc_height = max(4*cm, len(missing)*0.7*cm)
+    return _fig_to_image(fig, width=14*cm, height=min(calc_height, 20*cm))
 
 
 # ═════════════════════════════════════════════════════════════════════════════
