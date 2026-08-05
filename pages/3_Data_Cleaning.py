@@ -87,6 +87,30 @@ if st.button("🚀 Execute Strict Cleaning Pipeline", type="primary", use_contai
             st.error(f"Pipeline failed: {str(e)}")
             import traceback; st.code(traceback.format_exc())
 
+# ─── Before / After Summary ───────────────────────────────────────────────────
+if "cleaning_profile" in st.session_state:
+    summary = st.session_state["cleaning_profile"].get("__summary__")
+    if summary:
+        st.subheader("📊 Before vs After Summary")
+        s1, s2, s3, s4 = st.columns(4)
+        s1.metric("Missing Values", summary["after_missing"],
+                  delta=f"-{summary['missing_fixed']} fixed",
+                  delta_color="inverse")
+        s2.metric("Duplicate Rows", summary["after_dupes"],
+                  delta=f"-{summary['dupes_removed']} removed",
+                  delta_color="inverse")
+        s3.metric("Outlier Rows Flagged", summary["outlier_rows_flagged"])
+        s4.metric("Invalid Values Flagged", summary["invalid_rows_flagged"])
+
+        s5, s6, s7, s8 = st.columns(4)
+        s5.metric("Category Values Standardised", summary["categorical_values_standardised"])
+        s6.metric("Rows (Before → After)",
+                  f"{summary['before_rows']:,} → {summary['after_rows']:,}")
+        s7.metric("Columns (Before → After)",
+                  f"{summary['before_cols']} → {summary['after_cols']}")
+        s8.metric("Total Log Entries", summary["total_log_entries"])
+
+
 # ─── Reports ─────────────────────────────────────────────────────────────────
 if "changelog_df" in st.session_state:
     st.divider()
