@@ -62,14 +62,11 @@ numeric_cols = [c for c in df.select_dtypes(include="number").columns
 cat_cols = [c for c in df.select_dtypes(include=["object", "category"]).columns
             if df[c].nunique() <= 50]
 
-revenue_col   = find_col(df[numeric_cols] if numeric_cols else df.iloc[:,:0], ["revenue", "sales", "total_price", "total_amount", "income", "earnings"])
-price_col     = find_col(df[numeric_cols] if numeric_cols else df.iloc[:,:0], ["unit_price", "price", "cost"], exclude_keywords=["total"])
-qty_col       = find_col(df[numeric_cols] if numeric_cols else df.iloc[:,:0], ["quantity", "qty", "units", "volume"])
-category_col  = find_col(df, ["category", "product_category", "segment", "type", "department"])
-country_col   = find_col(df, ["country", "region", "location", "territory", "market"])
-product_col   = find_col(df, ["product", "item", "sku", "product_name"])
-status_col    = find_col(df, ["status", "order_status", "state"])
-customer_col  = find_col(df, ["customer", "client", "customer_id"])
+category_col  = find_col(df, ["category", "product_category", "segment", "type", "department", "role", "job_role", "gender"])
+country_col   = find_col(df, ["country", "region", "location", "territory", "market", "branch", "city", "state"])
+product_col   = find_col(df, ["product", "item", "sku", "product_name", "employee", "patient", "campaign", "student", "machine"])
+status_col    = find_col(df, ["status", "order_status", "state", "attrition", "diagnosis", "grade", "defect"])
+customer_col  = find_col(df, ["customer", "client", "customer_id", "patient_id", "employee_id", "student_id"])
 
 # Date column: prefer already-parsed, then try string detection
 dt_parsed = df.select_dtypes(include=["datetime64", "datetimetz"]).columns.tolist()
@@ -88,51 +85,36 @@ if not date_col:
 # ══════════════════════════════════════════════════════════════════════════════
 st.subheader("📌 Key Performance Indicators")
 
+from utils.domain_detector import detect_domain, classify_kpis
+domain_info = detect_domain(df)
+kpis = classify_kpis(df, domain_info)
+
 kpi_cols = st.columns(5)
 
-# KPI 1: Total Revenue
-with kpi_cols[0]:
-    if revenue_col:
-        total_rev = df[revenue_col].sum()
-        st.metric("💰 Total Revenue", f"{total_rev:,.0f}")
-    else:
-        st.metric("📦 Total Records", f"{len(df):,}")
+# Render up to 4 dynamic KPIs from domain_detector
+for i in range(4):
+    with kpi_cols[i]:
+        if i < len(kpis):
+            kpi = kpis[i]
+            label = f"{kpi['icon']} {kpi['label']}"
+            if kpi["agg"] == "rate" and "rate" in kpi["stats"]:
+                st.metric(label, f"{kpi['stats']['rate']:.1%}")
+            elif kpi["agg"] == "sum" and "sum" in kpi["stats"]:
+                st.metric(label, f"{kpi['stats']['sum']:,.0f}")
+            else:
+                st.metric(label, f"{kpi['stats']['mean']:,.2f}")
+        else:
+            if i == 0:
+                st.metric("📦 Total Records", f"{len(df):,}")
+            elif i == 1 and customer_col:
+                st.metric("👥 Unique Entities", f"{df[customer_col].nunique():,}")
+            elif i == 2:
+                missing_pct = df.isnull().mean().mean() * 100
+                st.metric("🔍 Missing Data", f"{missing_pct:.1f}%")
+            else:
+                st.empty()
 
-# KPI 2: Total Orders / Records
-with kpi_cols[1]:
-    total_orders = len(df)
-    if customer_col:
-        unique_customers = df[customer_col].nunique()
-        st.metric("👥 Unique Customers", f"{unique_customers:,}")
-    else:
-        st.metric("📋 Total Orders", f"{total_orders:,}")
-
-# KPI 3: Average Order Value
-with kpi_cols[2]:
-    if revenue_col:
-        aov = df[revenue_col].mean()
-        st.metric("🧾 Avg Order Value", f"{aov:,.2f}")
-    elif price_col:
-        avg_price = df[price_col].mean()
-        st.metric("💵 Avg Unit Price", f"{avg_price:,.2f}")
-    else:
-        st.metric("📋 Total Orders", f"{total_orders:,}")
-
-# KPI 4: Cancellation / Return Rate
-with kpi_cols[3]:
-    if status_col:
-        cancel_keywords = ["cancel", "return", "refund", "reject", "failed"]
-        cancel_mask = df[status_col].astype(str).str.lower().str.contains("|".join(cancel_keywords), na=False)
-        cancel_rate = cancel_mask.mean() * 100
-        st.metric("❌ Cancellation Rate", f"{cancel_rate:.1f}%")
-    elif qty_col:
-        total_qty = df[qty_col].sum()
-        st.metric("📦 Total Quantity Sold", f"{total_qty:,.0f}")
-    else:
-        missing_pct = df.isnull().mean().mean() * 100
-        st.metric("🔍 Missing Data", f"{missing_pct:.1f}%")
-
-# KPI 5: Date range
+# KPI 5: Date range (Always show if date column exists)
 with kpi_cols[4]:
     if date_col:
         try:
@@ -150,10 +132,10 @@ with kpi_cols[4]:
 st.divider()
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 2 — REVENUE / METRIC BY CATEGORY & COUNTRY
+# SECTION 2 — METRIC BY CATEGORY & COUNTRY
 # ══════════════════════════════════════════════════════════════════════════════
-metric_col = revenue_col or (numeric_cols[0] if numeric_cols else None)
-metric_label = revenue_col or (numeric_cols[0] if numeric_cols else "Count")
+metric_col = kpis[0]["column"] if kpis else (numeric_cols[0] if numeric_cols else None)
+metric_label = kpis[0]["label"] if kpis else (numeric_cols[0] if numeric_cols else "Count")
 
 col_a, col_b = st.columns(2)
 
@@ -257,7 +239,7 @@ col_c, col_d = st.columns(2)
 
 with col_c:
     if product_col and metric_col:
-        st.subheader(f"🏆 Top 10 {product_col}s by {metric_label}")
+        st.subheader(f"🏆 Top 10 Entities by {metric_label}")
         top_products = df.groupby(product_col)[metric_col].sum().sort_values(ascending=False).head(10).reset_index()
         fig = px.bar(
             top_products, x=metric_col, y=product_col,
@@ -278,7 +260,7 @@ with col_c:
 
 with col_d:
     if status_col:
-        st.subheader(f"🔄 Order Status Breakdown")
+        st.subheader(f"🔄 State / Status Breakdown")
         status_counts = df[status_col].value_counts().reset_index()
         status_counts.columns = ["Status", "Count"]
         fig = px.pie(
